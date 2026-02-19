@@ -36,10 +36,25 @@ Funcionalidades principais:
 
 ```bash
 npm install
+cp .env.example .env
 npm run dev
 ```
 
 Aplicação disponível em `http://localhost:8080`.
+
+## Variáveis de ambiente
+
+O frontend usa a variável `VITE_API_BASE_URL` para definir a URL da API.
+
+Arquivos:
+- `.env.example`: referência para desenvolvimento local
+- `.env`: arquivo local (não versionado) com o valor usado no ambiente atual
+
+Exemplo local:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000
+```
 
 ## Scripts
 
@@ -95,9 +110,21 @@ Arquivos de configuração:
 ## Camada de API
 
 Cliente HTTP em `src/services/api.ts`:
-- `baseURL`: `http://localhost:3000`
+- `baseURL`: `import.meta.env.VITE_API_BASE_URL`
 - `Content-Type`: `application/json`
 - suporte a payload no formato `{ success, message, data }` e fallback para resposta direta
+
+## CI/CD com GitHub Actions + Render
+
+Workflow em `.github/workflows/deploy-render.yml`:
+- roda em `pull_request` para `main`: instala dependências, executa testes e build
+- roda em `push` para `main`: executa CI e, se passar, dispara deploy no Render
+
+Configuração necessária no GitHub:
+1. No Render, copie o **Deploy Hook URL** do serviço.
+2. No GitHub, acesse `Settings > Secrets and variables > Actions`.
+3. Crie o secret `RENDER_DEPLOY_HOOK_URL` com o valor do hook.
+4. Faça merge/push na `main` para disparar o deploy automático.
 
 Endpoints esperados no backend:
 - `POST /auth/login`
