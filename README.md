@@ -4,7 +4,7 @@ Plataforma web para publicação e leitura de posts, com autenticação, control
 
 ## Visão geral
 
-O projeto é um frontend React que consome uma API REST em `http://localhost:3000`.
+O projeto é um frontend React que consome uma API REST configurada por variável de ambiente (`VITE_API_BASE_URL`).
 
 Funcionalidades principais:
 - listagem e busca de posts
@@ -55,6 +55,24 @@ Exemplo local:
 ```env
 VITE_API_BASE_URL=http://localhost:3000
 ```
+
+## Executar com Docker
+
+Build da imagem:
+
+```bash
+docker build \
+  --build-arg VITE_API_BASE_URL=http://localhost:3000 \
+  -t systemconnect-frontend .
+```
+
+Executar container:
+
+```bash
+docker run --rm -p 8080:80 systemconnect-frontend
+```
+
+Aplicação disponível em `http://localhost:8080`.
 
 ## Scripts
 
