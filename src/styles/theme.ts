@@ -2,13 +2,13 @@ export const lightTheme = {
   colors: {
     background: '#F5F7FB',
     backgroundAlt: '#EDF1F7',
-    surface: '#F7F9FD',
+    surface: '#17204333',
     foreground: '#1B2433',
     foregroundSecondary: '#5A6880',
-    card: '#FFFFFF',
+    card: '#17204333',
     cardHover: '#F8FBFF',
-    border: '#CFD8E6',
-    borderLight: '#DFE6F1',
+    border: '#172043',
+    borderLight: '#172043',
     primary: '#0F2D5C',
     primaryHover: '#0C264E',
     primaryLight: '#E9EEF7',
@@ -40,8 +40,8 @@ export const lightTheme = {
     heroText: '#F9FBFF',
   },
   fonts: {
-    heading: "'Georgia', 'Times New Roman', serif",
-    body: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif",
+    heading: "'Montserrat', 'Poppins', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+    body: "'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
   },
   fontSizes: {
     xs: '0.75rem',
