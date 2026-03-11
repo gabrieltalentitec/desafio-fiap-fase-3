@@ -1,54 +1,27 @@
-# SystemConnect
+# Tech Challenge FIAP - Fase 03
 
-Plataforma web para publicação e leitura de posts, com autenticação, controle por perfil (`teacher` e `student`) e interface responsiva com tema claro/escuro.
+Frontend em React para a plataforma de blogging acadêmico desenvolvida no Tech Challenge. A aplicação permite leitura de posts para estudantes e gestão de conteúdo para professores, consumindo a API REST entregue na fase 02.
 
-## Visão geral
+## Objetivo da fase
 
-O projeto é um frontend React que consome uma API REST configurada por variável de ambiente (`VITE_API_BASE_URL`).
+Esta entrega atende ao desafio da FIAP de construir a interface gráfica da aplicação de blogging com:
 
-Funcionalidades principais:
 - listagem e busca de posts
-- visualização de post completo
-- autenticação com persistência em cookie
-- criação de conta de professor
-- criação, edição e exclusão de posts (perfil professor)
-- área administrativa para gestão de posts
-- feedback visual com skeletons, estados de erro/vazio e toasts
+- leitura de post completo
+- autenticação de professores
+- criação, edição e exclusão de postagens
+- página administrativa
+- responsividade
+- documentação técnica no repositório
 
-## Stack técnica
+O backend utilizado por este frontend é o da fase 02.
 
-- React 18
-- TypeScript
-- Vite 5
-- React Router DOM 6
-- styled-components 6
-- Axios
-- Zod
-- react-hot-toast
-- Vitest + Testing Library
+## Integração com a API da fase 02
 
-## Requisitos
+Este projeto foi preparado para dois cenários:
 
-- Node.js 18+
-- npm 9+
-
-## Como rodar localmente
-
-```bash
-npm install
-cp .env.example .env
-npm run dev
-```
-
-Aplicação disponível em `http://localhost:8080`.
-
-## Variáveis de ambiente
-
-O frontend usa a variável `VITE_API_BASE_URL` para definir a URL da API.
-
-Arquivos:
-- `.env.example`: referência para desenvolvimento local
-- `.env`: arquivo local (não versionado) com o valor usado no ambiente atual
+- Desenvolvimento local: basta subir a API da fase 02 localmente e configurar `VITE_API_BASE_URL` para ela.
+- Produção: a aplicação consome a URL pública `https://desafio-fiap-fase-2.onrender.com/`.
 
 Exemplo local:
 
@@ -56,95 +29,173 @@ Exemplo local:
 VITE_API_BASE_URL=http://localhost:3000
 ```
 
-## Executar com Docker
+Exemplo para build de produção:
 
-Build da imagem:
-
-```bash
-docker build \
-  --build-arg VITE_API_BASE_URL=http://localhost:3000 \
-  -t systemconnect-frontend .
+```env
+VITE_API_BASE_URL=https://desafio-fiap-fase-2.onrender.com/
 ```
 
-Executar container:
+## Stack
+
+- React 18
+- TypeScript
+- Vite 5
+- React Router DOM
+- styled-components
+- Axios
+- Zod
+- react-hot-toast
+- Vitest
+- Testing Library
+
+## Requisitos
+
+- Node.js 18 ou superior
+- npm 9 ou superior
+- API da fase 02 rodando localmente para desenvolvimento
+
+## Setup inicial
+
+1. Instale as dependências:
 
 ```bash
-docker run --rm -p 8080:80 systemconnect-frontend
+npm install
+```
+
+2. Copie o arquivo de ambiente:
+
+```bash
+cp .env.example .env
+```
+
+3. Garanta que a API da fase 02 esteja rodando localmente.
+
+4. Inicie o frontend:
+
+```bash
+npm run dev
 ```
 
 Aplicação disponível em `http://localhost:8080`.
 
-## Scripts
+## Variáveis de ambiente
 
-- `npm run dev`: inicia servidor de desenvolvimento
-- `npm run build`: gera build de produção
-- `npm run build:dev`: gera build em modo development
-- `npm run preview`: serve o build localmente
-- `npm run lint`: executa ESLint
-- `npm test`: executa testes com Vitest
-- `npm run test:watch`: executa testes em modo watch
+A aplicação usa apenas uma variável obrigatória:
 
-## Estrutura do projeto
+- `VITE_API_BASE_URL`: URL base da API REST
 
-```txt
-src/
-  components/      # componentes reutilizáveis de UI e guardas de rota
-  contexts/        # AuthContext e ThemeContext
-  hooks/           # hooks customizados (ex: useDebounce)
-  pages/           # páginas mapeadas por rota
-  services/        # cliente HTTP e interceptors
-  styles/          # tema, tipagem do tema e estilos globais
-  test/            # setup e testes
-  types/           # tipagens compartilhadas
+Arquivo de referência:
+
+- `.env.example`
+
+Valor atual de exemplo no repositório:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000
 ```
 
-Arquivos de configuração:
-- `vite.config.ts`: configuração do Vite e alias `@ -> src`
-- `vitest.config.ts`: ambiente de testes (`jsdom`) e setup global
-- `eslint.config.js`: regras de lint para TS/React
-- `tsconfig*.json`: configuração TypeScript por contexto
+## Scripts disponíveis
 
-## Rotas da aplicação
+- `npm run dev`: inicia o servidor de desenvolvimento
+- `npm run build`: gera o build de produção
+- `npm run build:dev`: gera o build usando modo development
+- `npm run preview`: publica localmente o build gerado
+- `npm run lint`: executa o lint
+- `npm test`: executa os testes
+- `npm run test:watch`: executa os testes em modo watch
 
-- `/`: home com busca de posts
-- `/posts/:id`: detalhe de post
-- `/login`: autenticação
-- `/register`: criação de conta de professor
-- `/posts/new`: criar post (apenas professor)
-- `/posts/:id/edit`: editar post (apenas professor)
-- `/admin`: gestão de posts (apenas professor)
-- `/not-found` e `*`: página de não encontrado
+## Docker
 
-## Autenticação e autorização
+O repositório possui `Dockerfile` para build e execução do frontend.
 
-- sessão salva em cookie (`auth_token`, `auth_user`) via `js-cookie`
-- restauração automática de sessão ao carregar a aplicação
-- `TeacherRoute` protege rotas exclusivas de professor
-- interceptors do Axios com `Authorization: Bearer <token>` em todas as requisições autenticadas
-- tratamento centralizado de erros HTTP
-- `401`: remove sessão e redireciona para login
-- `403`: bloqueio silencioso para tratamento no fluxo da tela
+Build:
 
-## Camada de API
+```bash
+docker build \
+  --build-arg VITE_API_BASE_URL=https://desafio-fiap-fase-2.onrender.com/ \
+  -t desafio-fiap-fase-3 .
+```
 
-Cliente HTTP em `src/services/api.ts`:
-- `baseURL`: `import.meta.env.VITE_API_BASE_URL`
-- `Content-Type`: `application/json`
-- suporte a payload no formato `{ success, message, data }` e fallback para resposta direta
+Execução:
 
-## CI/CD com GitHub Actions + Render
+```bash
+docker run --rm -p 8080:80 desafio-fiap-fase-3
+```
 
-Workflow em `.github/workflows/deploy-render.yml`:
-- roda em `pull_request` para `main`: instala dependências, executa testes e build
-- roda em `push` para `main`: executa CI e, se passar, dispara deploy no Render
+## Funcionalidades implementadas
 
-Configuração necessária no GitHub:
-1. No Render, copie o **Deploy Hook URL** do serviço.
-2. No GitHub, acesse `Settings > Secrets and variables > Actions`.
-3. Crie o secret `RENDER_DEPLOY_HOOK_URL` com o valor do hook.
-4. Faça merge/push na `main` para disparar o deploy automático.
+### Área pública
 
-Endpoints esperados no backend:
+- listagem de posts na página inicial
+- busca por palavras-chave
+- leitura completa de posts
+- tratamento de loading, erro e estado vazio
+
+### Área autenticada
+
+- login de professor
+- persistência de sessão com cookies
+- criação de post
+- edição de post
+- exclusão de post
+- tela administrativa para gerenciamento das postagens
+
+## Regras de acesso
+
+- rotas de criação, edição e administração são protegidas
+- apenas usuários autenticados com perfil `teacher` acessam essas telas
+- o header `Authorization: Bearer <token>` é enviado automaticamente quando existe sessão
+- respostas `401` limpam a sessão local e redirecionam para login
+
+## Guia de uso
+
+### Fluxo básico
+
+1. Acesse a página inicial para visualizar e buscar posts.
+2. Abra um post para ler o conteúdo completo.
+3. Faça login como professor para liberar as áreas protegidas.
+4. Use `/posts/new` para publicar conteúdo.
+5. Use `/admin` para visualizar, editar e excluir postagens.
+
+### Rotas da aplicação
+
+- `/`: página inicial com listagem e busca
+- `/posts/:id`: leitura de post
+- `/login`: login
+- `/register`: cadastro de professor
+- `/posts/new`: criação de post
+- `/posts/:id/edit`: edição de post
+- `/admin`: administração
+- `*`: página de não encontrado
+
+## Arquitetura da aplicação
+
+Estrutura principal:
+
+```text
+src/
+  components/   componentes reutilizáveis de interface e guardas de rota
+  contexts/     autenticação e tema
+  hooks/        hooks customizados
+  pages/        páginas mapeadas pelo React Router
+  services/     cliente HTTP Axios e interceptadores
+  styles/       tema, estilos globais e tipagens
+  test/         setup de testes
+  types/        contratos TypeScript compartilhados
+```
+
+### Decisões de implementação
+
+- `React Router` controla a navegação da aplicação
+- `Context API` gerencia autenticação e tema
+- `styled-components` concentra a estilização e os tokens visuais
+- `Axios` centraliza a comunicação com a API
+- `Zod` valida formulários de login, cadastro e posts
+
+## Endpoints esperados do backend
+
+O frontend foi construído para consumir os endpoints da API da fase 02:
+
 - `POST /auth/login`
 - `POST /auth/register`
 - `GET /posts`
@@ -154,66 +205,31 @@ Endpoints esperados no backend:
 - `PUT /posts/:id`
 - `DELETE /posts/:id`
 
-## Padrões de componentes e UI
-
-Padrões adotados no código:
-- estilo via `styled-components` com tokens do tema
-- componentes compartilhados em `src/components`
-- props tipadas com TypeScript
-- variantes semânticas em botões (`primary`, `success`, `destructive`, etc.)
-- formulários com validação por `zod`
-- feedback de erro por campo usando componentes `Input` e `Textarea`
-- modais de confirmação para ações destrutivas
-- skeletons para estados de carregamento
-
-Boas práticas recomendadas para evolução:
-- evitar cores/tamanhos hardcoded fora de `src/styles/theme.ts`
-- manter consistência de espaçamento usando tokens de tema
-- preferir componentes reutilizáveis antes de criar novos padrões
-- manter textos de erro e sucesso consistentes com toasts
-
-## Tema e design system
-
-- tema claro e escuro definidos em `src/styles/theme.ts`
-- preferência de tema persistida em `localStorage` (`blog_theme`)
-- estilos globais em `src/styles/GlobalStyles.ts`
-- tipagem de tema em `src/styles/styled.d.ts`
-
 ## Testes
 
-Ferramentas já configuradas:
-- `Vitest`
-- `@testing-library/react`
-- `@testing-library/jest-dom`
-- ambiente `jsdom`
+O projeto possui cobertura inicial para regras importantes de comportamento:
 
-Como os testes funcionam hoje:
-- arquivos de teste ficam próximos ao código (`*.test.ts` / `*.test.tsx`)
-- setup global em `src/test/setup.ts` (inclui `jest-dom` e mock de `matchMedia`)
-- o alias `@/` também funciona nos testes (configurado no `vitest.config.ts`)
-- padrão recomendado: `describe` por módulo e `it` por cenário de negócio
+- restauração de sessão e fluxo de autenticação
+- proteção de rotas
+- comportamento do hook `useDebounce`
 
-Suíte atual implementada:
+Arquivos de teste presentes no repositório:
+
 - `src/contexts/AuthContext.test.tsx`
-- restauração de sessão por cookie
-- limpeza de sessão inválida
-- login persistindo token e usuário
 - `src/components/RouteGuards.test.tsx`
-- redirecionamentos de `PrivateRoute` e `TeacherRoute`
-- acesso permitido quando perfil está correto
 - `src/hooks/useDebounce.test.ts`
-- atualização do valor somente após o delay
 
-Comandos de execução:
-- `npm test`: roda todos os testes uma vez
-- `npm run test:watch`: roda em watch mode
-- `npx vitest run src/contexts/AuthContext.test.tsx`: roda um arquivo específico
-- `npx vitest --ui`: abre interface interativa local do Vitest (se quiser depurar cenários)
+Executar testes:
 
-## Convenções de código
+```bash
+npm test
+```
 
-- TypeScript como padrão
-- componentes e páginas em `PascalCase`
-- hooks em `camelCase` com prefixo `use`
-- alias de import `@/` para `src/`
-- lint com ESLint (`npm run lint`)
+## Responsividade e UI
+
+O projeto atende ao requisito de interface responsiva com:
+
+- layout adaptado para desktop e mobile
+- componentes reutilizáveis
+- tema claro/escuro
+- feedback visual com toasts e skeleton loaders
